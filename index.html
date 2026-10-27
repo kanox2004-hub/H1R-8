@@ -8,7 +8,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
-            // Tamari EmailJS Public Key ahiya mako (EmailJS Account -> Public Key)
+            // Replace with your actual EmailJS Public Key
             emailjs.init("YOUR_PUBLIC_KEY_HERE");
         })();
     </script>
@@ -265,7 +265,6 @@
                     <input type="text" id="regUsername" placeholder="Unique Username" required>
                 </div>
 
-                <!-- DOB Input for Age Restriction -->
                 <div class="form-group">
                     <label for="regDob">Birth Date (Aapki Janam Tithi):</label>
                     <input type="date" id="regDob" required>
@@ -354,7 +353,7 @@
                 <button type="submit" class="btn-submit" id="regSubmitBtn">Proceed to Verification 🔑</button>
             </form>
 
-            <!-- 3. VERIFICATION FORM (REGISTRATION) -->
+            <!-- 3. VERIFICATION FORM -->
             <form id="verifyForm" class="form-section">
                 <p style="margin-bottom: 15px; color: #d4af37;">Verification code has been sent to your selected Email/Phone.</p>
                 <div class="form-group">
@@ -374,7 +373,7 @@
                 <a class="forgot-link" onclick="showForm('login')">⬅ Back to Login</a>
             </form>
 
-            <!-- 5. FORGOT PASSWORD OTP VERIFICATION & NEW PASSWORD FORM -->
+            <!-- 5. FORGOT PASSWORD VERIFICATION FORM -->
             <form id="forgotVerifyForm" class="form-section">
                 <p style="margin-bottom: 15px; color: #d4af37;">Enter the OTP sent for password reset and set your new password.</p>
                 <div class="form-group">
@@ -402,11 +401,9 @@
         let selectedGender = 'Girl';
         let generatedOTP = null;
         let tempUserData = null;
-
         let forgotGeneratedOTP = null;
         let forgotTargetUserIndex = -1;
 
-        // EmailJS Constants
         const EMAILJS_SERVICE_ID = "service_k4dev8a";
         const EMAILJS_REG_TEMPLATE_ID = "template_jzlr718";
         const EMAILJS_FORGOT_TEMPLATE_ID = "template_de2ig8g";
@@ -419,22 +416,13 @@
 
         function togglePassword(inputId) {
             const passInput = document.getElementById(inputId);
-            if (passInput.type === "password") {
-                passInput.type = "text";
-            } else {
-                passInput.type = "password";
-            }
+            passInput.type = passInput.type === "password" ? "text" : "password";
         }
 
         function toggleVerifyInput() {
             const mode = document.querySelector('input[name="verifyMode"]:checked').value;
-            if (mode === 'email') {
-                document.getElementById('emailInputGroup').style.display = 'block';
-                document.getElementById('phoneInputGroup').style.display = 'none';
-            } else {
-                document.getElementById('emailInputGroup').style.display = 'none';
-                document.getElementById('phoneInputGroup').style.display = 'block';
-            }
+            document.getElementById('emailInputGroup').style.display = mode === 'email' ? 'block' : 'none';
+            document.getElementById('phoneInputGroup').style.display = mode === 'phone' ? 'block' : 'none';
         }
 
         function showForm(formType) {
@@ -460,7 +448,6 @@
             return JSON.parse(localStorage.getItem('registeredUsers') || '[]');
         }
 
-        // Calculate Age helper function
         function calculateAge(dobString) {
             const dob = new Date(dobString);
             const diff = Date.now() - dob.getTime();
@@ -478,7 +465,6 @@
             const year = document.getElementById('year').value;
             const verifyMode = document.querySelector('input[name="verifyMode"]:checked').value;
 
-            // Age Check (Must be 18 or above)
             const age = calculateAge(dob);
             if (age < 18) {
                 alert("⚠️ Aapki age 18 saal se kam hai, isliye aap register nahi kar sakte!");
@@ -486,7 +472,6 @@
             }
 
             let contactVal = "";
-
             if (verifyMode === 'email') {
                 contactVal = document.getElementById('regEmail').value.trim();
                 if (!contactVal.toLowerCase().endsWith('@gmail.com')) {
@@ -502,24 +487,13 @@
             }
 
             let users = getUsers();
-            const existingUser = users.find(u => u.username === username || u.contact === contactVal);
-            if (existingUser) {
+            if (users.find(u => u.username === username || u.contact === contactVal)) {
                 alert("⚠️ This Username or Email/Mobile is already registered! Please login.");
                 showForm('login');
                 return;
             }
 
-            tempUserData = {
-                username: username,
-                contact: contactVal,
-                password: password,
-                gender: selectedGender,
-                age: age,
-                branch: branch,
-                year: year,
-                isVerified: false
-            };
-
+            tempUserData = { username, contact: contactVal, password, gender: selectedGender, age, branch, year, isVerified: false };
             generatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
 
             const submitBtn = document.getElementById('regSubmitBtn');
@@ -527,21 +501,15 @@
             submitBtn.disabled = true;
 
             if (verifyMode === 'email') {
-                const templateParams = {
-                    to_email: contactVal,
-                    to_name: username,
-                    otp: generatedOTP
-                };
-
-                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_REG_TEMPLATE_ID, templateParams)
-                    .then(function(response) {
+                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_REG_TEMPLATE_ID, { to_email: contactVal, to_name: username, otp: generatedOTP })
+                    .then(() => {
                         alert("📧 OTP has been sent to your email ID!");
                         submitBtn.innerText = "Proceed to Verification 🔑";
                         submitBtn.disabled = false;
                         showForm('verify');
-                    }, function(error) {
+                    }, (error) => {
                         console.error("EmailJS Error:", error);
-                        alert("❌ Failed to send OTP via Email. Backup OTP shown: " + generatedOTP);
+                        alert("🔑 OTP Code (Fallback): " + generatedOTP);
                         submitBtn.innerText = "Proceed to Verification 🔑";
                         submitBtn.disabled = false;
                         showForm('verify');
@@ -556,9 +524,7 @@
 
         document.getElementById('verifyForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const inputOTP = document.getElementById('otpCode').value.trim();
-
-            if (inputOTP === generatedOTP && tempUserData) {
+            if (document.getElementById('otpCode').value.trim() === generatedOTP && tempUserData) {
                 tempUserData.isVerified = true;
                 let users = getUsers();
                 users.push(tempUserData);
@@ -574,38 +540,22 @@
                 alert("✅ Verification Successful! Directing to Home Page...");
                 window.location.href = 'jgmch2.html';
             } else {
-                alert("❌ Incorrect Verification Code! Please enter the correct OTP.");
+                alert("❌ Incorrect Verification Code!");
             }
         });
 
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-
             const inputUser = document.getElementById('loginUser').value.trim();
             const inputPass = document.getElementById('loginPassword').value;
 
             let users = getUsers();
             const userFound = users.find(u => (u.username === inputUser || u.contact === inputUser));
 
-            if (!userFound) {
-                alert("❌ User not found! Please register first.");
-                return;
-            }
-
-            if (userFound.password !== inputPass) {
-                alert("Wrong Password");
-                return;
-            }
-
-            if (!userFound.isVerified) {
-                alert("⚠️ Your account is not verified. Please complete verification first.");
-                return;
-            }
-
-            if (userFound.age < 18) {
-                alert("⚠️ Access Denied: Age must be 18 or above.");
-                return;
-            }
+            if (!userFound) return alert("❌ User not found! Please register first.");
+            if (userFound.password !== inputPass) return alert("Wrong Password");
+            if (!userFound.isVerified) return alert("⚠️ Account not verified.");
+            if (userFound.age < 18) return alert("⚠️ Age must be 18 or above.");
 
             localStorage.setItem('userGender', userFound.gender);
             localStorage.setItem('userAge', userFound.age);
@@ -614,42 +564,33 @@
             localStorage.setItem('userPhone', userFound.contact);
             localStorage.setItem('currentUser', userFound.username);
 
-            alert("✅ Login Successful! Welcome " + userFound.username);
+            alert("✅ Login Successful!");
             window.location.href = 'jgmch2.html';
         });
 
-        // Step 1: Request Password Reset OTP
         document.getElementById('forgotForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const inputUser = document.getElementById('forgotUser').value.trim();
-
             let users = getUsers();
             forgotTargetUserIndex = users.findIndex(u => u.username === inputUser || u.contact === inputUser);
 
             if (forgotTargetUserIndex !== -1) {
                 forgotGeneratedOTP = Math.floor(1000 + Math.random() * 9000).toString();
                 const targetUser = users[forgotTargetUserIndex];
-
                 const submitBtn = document.getElementById('forgotSubmitBtn');
                 submitBtn.innerText = "Sending Reset OTP...";
                 submitBtn.disabled = true;
 
                 if (targetUser.contact.includes('@')) {
-                    const templateParams = {
-                        to_email: targetUser.contact,
-                        to_name: targetUser.username,
-                        otp: forgotGeneratedOTP
-                    };
-
-                    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_FORGOT_TEMPLATE_ID, templateParams)
-                        .then(function(response) {
-                            alert("📧 Password Reset OTP sent to your email ID!");
+                    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_FORGOT_TEMPLATE_ID, { to_email: targetUser.contact, to_name: targetUser.username, otp: forgotGeneratedOTP })
+                        .then(() => {
+                            alert("📧 Reset OTP sent to your email!");
                             submitBtn.innerText = "Send Reset OTP 🔑";
                             submitBtn.disabled = false;
                             showForm('forgotVerify');
-                        }, function(error) {
+                        }, (error) => {
                             console.error("EmailJS Error:", error);
-                            alert("❌ Failed to send OTP via Email. Backup OTP shown: " + forgotGeneratedOTP);
+                            alert("🔑 Password Reset OTP: " + forgotGeneratedOTP);
                             submitBtn.innerText = "Send Reset OTP 🔑";
                             submitBtn.disabled = false;
                             showForm('forgotVerify');
@@ -661,29 +602,20 @@
                     showForm('forgotVerify');
                 }
             } else {
-                alert("❌ Username or Mobile/Email not found in records.");
+                alert("❌ User not found.");
             }
         });
 
-        // Step 2: Verify OTP and Save New Password
         document.getElementById('forgotVerifyForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const inputOTP = document.getElementById('forgotOtpCode').value.trim();
-            const newPass = document.getElementById('forgotNewPassword').value;
-
-            if (inputOTP === forgotGeneratedOTP && forgotTargetUserIndex !== -1) {
+            if (document.getElementById('forgotOtpCode').value.trim() === forgotGeneratedOTP && forgotTargetUserIndex !== -1) {
                 let users = getUsers();
-                users[forgotTargetUserIndex].password = newPass;
+                users[forgotTargetUserIndex].password = document.getElementById('forgotNewPassword').value;
                 localStorage.setItem('registeredUsers', JSON.stringify(users));
-
-                alert("✅ Password successfully updated! Please login with your new password.");
-                document.getElementById('forgotOtpCode').value = '';
-                document.getElementById('forgotNewPassword').value = '';
-                forgotGeneratedOTP = null;
-                forgotTargetUserIndex = -1;
+                alert("✅ Password updated successfully!");
                 showForm('login');
             } else {
-                alert("❌ Incorrect Verification Code! Please try again.");
+                alert("❌ Incorrect Verification Code!");
             }
         });
     </script>
