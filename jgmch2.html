@@ -1,49 +1,606 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MED-CONFESSIONS | Jalpaiguri Medical College Portal</title>
-    <!-- Keep existing CSS styles -->
+    <title>MED-CONFESSIONS | Jalpaiguri Medical College</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #060d16;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        /* ----- HEADER ----- */
+        header {
+            background: rgba(10, 25, 41, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-title {
+            color: #00f2fe;
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .user-badge {
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid #00f2fe;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #00f2fe;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-share-main {
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            color: #060d16;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.3s;
+        }
+
+        .btn-share-main:hover {
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
+        }
+
+        .btn-admin {
+            background: rgba(255, 42, 109, 0.2);
+            border: 1px solid #ff2a6d;
+            color: #ff2a6d;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* ----- HORIZONTAL NAVBAR ----- */
+        .navbar {
+            background: #0a1726;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .nav-tab {
+            color: #94a3b8;
+            padding: 8px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+        }
+
+        .nav-tab.active, .nav-tab:hover {
+            background: #00f2fe;
+            color: #060d16;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+        }
+
+        /* ----- MAIN CONTAINER ----- */
+        .container {
+            max-width: 1100px;
+            margin: 25px auto;
+            display: grid;
+            grid-template-columns: 2.2fr 1fr;
+            gap: 25px;
+            padding: 0 15px;
+        }
+
+        /* CREATE CONFESSION FORM */
+        .post-form-card {
+            background: rgba(15, 28, 44, 0.8);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .post-form-card h3 {
+            color: #00f2fe;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 90px;
+            background: #060d16;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            color: #fff;
+            resize: none;
+            font-size: 14px;
+            outline: none;
+            margin-bottom: 12px;
+        }
+
+        textarea:focus {
+            border-color: #00f2fe;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .lock-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #ff758c;
+            cursor: pointer;
+        }
+
+        .pin-input {
+            width: 100px;
+            padding: 6px;
+            background: #060d16;
+            border: 1px solid #ff758c;
+            border-radius: 6px;
+            color: white;
+            font-size: 12px;
+            text-align: center;
+            display: none;
+        }
+
+        .btn-post {
+            background: linear-gradient(135deg, #00f2fe, #00f5a0);
+            color: #060d16;
+            border: none;
+            padding: 9px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* CONFESSION CARDS */
+        .confession-card {
+            background: rgba(15, 28, 44, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+
+        .tag-badge {
+            background: rgba(0, 242, 254, 0.15);
+            color: #00f2fe;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .confession-text {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #f1f5f9;
+            margin-bottom: 15px;
+        }
+
+        /* LOCKED CONTENT STYLING */
+        .locked-box {
+            background: rgba(255, 42, 109, 0.1);
+            border: 1px dashed #ff2a6d;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .locked-box p {
+            color: #ff758c;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .unlock-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .unlock-controls input {
+            width: 110px;
+            padding: 6px;
+            background: #060d16;
+            border: 1px solid #ff2a6d;
+            border-radius: 6px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .btn-unlock {
+            background: #ff2a6d;
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 12px;
+            font-size: 13px;
+        }
+
+        .btn-action {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-action:hover {
+            color: #00f2fe;
+        }
+
+        /* SIDEBAR */
+        .sidebar-card {
+            background: rgba(15, 28, 44, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-card h4 {
+            color: #00f2fe;
+            margin-bottom: 12px;
+        }
+
+        .share-box-side {
+            background: #060d16;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .share-box-side p {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .btn-copy-side {
+            width: 100%;
+            background: rgba(0, 242, 254, 0.15);
+            border: 1px solid #00f2fe;
+            color: #00f2fe;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
 </head>
-<body oncontextmenu="return false;">
-    <!-- Keep existing HTML Structure intact -->
+<body>
 
+    <!-- HEADER -->
+    <header>
+        <div class="logo-section">
+            <span style="font-size: 24px;">🩺</span>
+            <div class="logo-title">MED-CONFESSIONS</div>
+        </div>
+
+        <div class="user-badge" id="userInfo">👧 Girl | General Medicine | 3rd Prof</div>
+
+        <div class="header-actions">
+            <button class="btn-share-main" onclick="copyWebsiteLink()">
+                🔗 Share Link
+            </button>
+            <button class="btn-admin" id="adminBtn" onclick="toggleAdminMode()">
+                🔐 Admin Mode: OFF
+            </button>
+        </div>
+    </header>
+
+    <!-- HORIZONTAL NAVBAR -->
+    <nav class="navbar">
+        <span class="nav-tab active">🏠 Home Feed</span>
+        <span class="nav-tab">🎯 My Branch (Medicine)</span>
+        <span class="nav-tab">🎓 My Prof Year</span>
+        <span class="nav-tab">🔒 Locked Secrets</span>
+        <span class="nav-tab">💌 Med Crushes</span>
+        <span class="nav-tab">🔥 Trending Teas</span>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+        <!-- LEFT: FEED & POST FORM -->
+        <div class="main-feed">
+            
+            <!-- POST FORM -->
+            <div class="post-form-card">
+                <h3>✍️ Post Anonymous Confession</h3>
+                <textarea id="confessionInput" placeholder="Write your secret, rant, or confession anonymously..."></textarea>
+                
+                <div class="form-options">
+                    <label class="lock-checkbox">
+                        <input type="checkbox" id="lockCheck" onchange="togglePinInput()"> 🔒 Lock with 4-Digit PIN
+                    </label>
+                    <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="PIN (e.g. 1234)">
+                    
+                    <button class="btn-post" onclick="submitConfession()">Post Secret 🚀</button>
+                </div>
+            </div>
+
+            <!-- FEED LIST -->
+            <div id="feedList">
+                
+                <!-- EXAMPLE 1: PUBLIC CONFESSION -->
+                <div class="confession-card">
+                    <div class="card-header">
+                        <span>👧 Girl • General Medicine • 3rd Prof</span>
+                        <span class="tag-badge">Public</span>
+                    </div>
+                    <div class="confession-text">
+                        Round duty in OPD today was extremely exhausting, but managed to learn ECG interpretation from senior doctor! 🩺✨
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-action">❤️ 24 Likes</button>
+                        <button class="btn-action" onclick="copyWebsiteLink()">🔗 Share Direct Link</button>
+                    </div>
+                </div>
+
+                <!-- EXAMPLE 2: LOCKED CONFESSION -->
+                <div class="confession-card" id="card-locked-1">
+                    <div class="card-header">
+                        <span>👦 Boy • General Surgery • Final Prof</span>
+                        <span class="tag-badge" style="background: rgba(255,42,109,0.2); color: #ff2a6d;">🔒 Private Lock</span>
+                    </div>
+                    
+                    <!-- Locked Box Preview -->
+                    <div class="locked-box" id="lock-box-1">
+                        <p>🔒 This confession is PIN protected. Only the person with the 4-digit PIN can unlock it.</p>
+                        <div class="unlock-controls">
+                            <input type="password" id="pin-field-1" maxlength="4" placeholder="Enter PIN">
+                            <button class="btn-unlock" onclick="unlockPost(1, '9999')">Unlock 🔓</button>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Content (Secret Text) -->
+                    <div class="confession-text" id="secret-text-1" style="display: none; color: #00f5a0; border-left: 3px solid #00f5a0; padding-left: 10px;">
+                        🤫 [UNLOCKED SECRET]: I accidentally dropped the stethoscope during rounds, but my crush from Pediatrics caught it! 😳💖
+                    </div>
+
+                    <div class="card-footer">
+                        <button class="btn-action">🔒 Locked Post</button>
+                        <button class="btn-action" onclick="copyWebsiteLink()">🔗 Share Secret Link</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- RIGHT: SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-card">
+                <h4>📲 Share College Portal</h4>
+                <div class="share-box-side">
+                    <p>Share this link in WhatsApp groups or Instagram bio so friends can post confessions!</p>
+                    <button class="btn-copy-side" onclick="copyWebsiteLink()">📋 Copy Link</button>
+                </div>
+            </div>
+
+            <div class="sidebar-card">
+                <h4>⚡ Quick Info</h4>
+                <p style="font-size: 13px; color: #94a3b8; line-height: 1.5;">
+                    • Lock facility is for sending private messages to friends.<br>
+                    • Only Admin can bypass locks.<br>
+                    • No login/password saved permanently.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
     <script>
-        let currentUsername = localStorage.getItem('currentUser') || 'Anonymous User';
-        let userAge = localStorage.getItem('userAge') || '20';
-        let isAdmin = false;
-        let activeGroup = 'General Campus';
-        let activeIgUser = null;
-        let activeDatingPartner = null;
+        // 🟢 1. YE CODE LOGIN PAGE KA DATA UTHAKAR HEADER ME DIKHANE KE LIYE HAI:
+        window.addEventListener('DOMContentLoaded', function() {
+            const gender = localStorage.getItem('userGender') || 'Girl';
+            const branch = localStorage.getItem('userBranch') || 'General Medicine';
+            const year = localStorage.getItem('userYear') || '3rd Prof';
 
-        function checkIfBanned() {
-            let bannedUsers = JSON.parse(localStorage.getItem('bannedUsers') || '[]');
-            if (bannedUsers.includes(currentUsername)) {
-                alert("🚨 Your account has been permanently banned by the Admin!");
-                localStorage.removeItem('currentUser');
-                window.location.href = 'index.html';
+            const badge = document.getElementById('userInfo');
+            if (badge) {
+                let icon = gender === 'Boy' ? '👦' : '👧';
+                badge.innerText = `${icon} ${gender} | ${branch} | ${year}`;
+            }
+        });
+
+        // 2. AAPKA PURANA APP LOGIC (Admin, Post, Lock/Unlock):
+        let isAdmin = false;
+
+        // Toggle PIN Input Box when Lock checkbox is clicked
+        function togglePinInput() {
+            const isChecked = document.getElementById('lockCheck').checked;
+            document.getElementById('pinInput').style.display = isChecked ? 'inline-block' : 'none';
+        }
+
+        // Copy Website Link to Clipboard
+        function copyWebsiteLink() {
+            const currentUrl = window.location.href;
+            navigator.clipboard.writeText(currentUrl);
+            alert("🔗 Website Link Copied!\nPaste it on WhatsApp or Instagram so friends can post confessions.");
+        }
+
+        // Submit New Confession
+        function submitConfession() {
+            const text = document.getElementById('confessionInput').value.trim();
+            const isLocked = document.getElementById('lockCheck').checked;
+            const pin = document.getElementById('pinInput').value.trim();
+
+            if (!text) {
+                alert("Kripya pehle confession text likhein!");
+                return;
+            }
+
+            if (isLocked && pin.length !== 4) {
+                alert("Locked confession ke liye 4-digit PIN daalna zaroori hai!");
+                return;
+            }
+
+            const id = Date.now();
+            const feed = document.getElementById('feedList');
+
+            // LocalStorage se current logged-in user ki details card ke liye uthana
+            const currentGender = localStorage.getItem('userGender') || 'Girl';
+            const currentBranch = localStorage.getItem('userBranch') || 'General Medicine';
+            let icon = currentGender === 'Boy' ? '👦' : '👧';
+
+            let cardHtml = '';
+
+            if (isLocked) {
+                cardHtml = `
+                    <div class="confession-card">
+                        <div class="card-header">
+                            <span>${icon} ${currentGender} • ${currentBranch}</span>
+                            <span class="tag-badge" style="background: rgba(255,42,109,0.2); color: #ff2a6d;">🔒 Private Lock</span>
+                        </div>
+                        <div class="locked-box" id="lock-box-${id}">
+                            <p>🔒 This confession is PIN protected.</p>
+                            <div class="unlock-controls">
+                                <input type="password" id="pin-field-${id}" maxlength="4" placeholder="Enter PIN">
+                                <button class="btn-unlock" onclick="unlockPost('${id}', '${pin}')">Unlock 🔓</button>
+                            </div>
+                        </div>
+                        <div class="confession-text" id="secret-text-${id}" style="display: none; color: #00f5a0; border-left: 3px solid #00f5a0; padding-left: 10px;">
+                            🤫 [UNLOCKED SECRET]: ${text}
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-action">🔒 Locked Post</button>
+                            <button class="btn-action" onclick="copyWebsiteLink()">🔗 Share Secret Link</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                cardHtml = `
+                    <div class="confession-card">
+                        <div class="card-header">
+                            <span>${icon} ${currentGender} • ${currentBranch}</span>
+                            <span class="tag-badge">Public</span>
+                        </div>
+                        <div class="confession-text">${text}</div>
+                        <div class="card-footer">
+                            <button class="btn-action">❤️ 1 Like</button>
+                            <button class="btn-action" onclick="copyWebsiteLink()">🔗 Share Direct Link</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            feed.insertAdjacentHTML('afterbegin', cardHtml);
+            document.getElementById('confessionInput').value = '';
+            document.getElementById('pinInput').value = '';
+            document.getElementById('lockCheck').checked = false;
+            togglePinInput();
+            alert("Confession successfully posted!");
+        }
+
+        // Unlock Post logic
+        function unlockPost(id, correctPin) {
+            if (isAdmin) {
+                document.getElementById(`lock-box-${id}`).style.display = 'none';
+                document.getElementById(`secret-text-${id}`).style.display = 'block';
+                return;
+            }
+
+            const inputPin = document.getElementById(`pin-field-${id}`).value;
+            if (inputPin === correctPin) {
+                document.getElementById(`lock-box-${id}`).style.display = 'none';
+                document.getElementById(`secret-text-${id}`).style.display = 'block';
+            } else {
+                alert("❌ Wrong PIN! Only the person with correct PIN can open this.");
             }
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            checkIfBanned();
-            const gender = localStorage.getItem('userGender') || 'Girl';
-            const badge = document.getElementById('userInfo');
-            if (badge) badge.innerText = `${gender === 'Boy' ? '👦' : '👧'} ${currentUsername} (Age: ${userAge})`;
-            
-            if(document.getElementById('profileAgeInput')) document.getElementById('profileAgeInput').value = userAge;
-            if(document.getElementById('myAgeInput')) document.getElementById('myAgeInput').value = userAge;
-
-            setupAntiScreenshot();
-            loadAllData();
-
-            setInterval(() => {
-                loadAllData();
-            }, 2000);
-        });
-
-        // Rest of functions remain intact
+        // Admin Mode Toggle (Master PIN: admin123)
+        function toggleAdminMode() {
+            if (!isAdmin) {
+                const key = prompt("Enter Master Admin Key:");
+                if (key === "admin123") {
+                    isAdmin = true;
+                    document.getElementById('adminBtn').innerText = "🔓 Admin Mode: ON";
+                    document.getElementById('adminBtn').style.background = "#00f5a0";
+                    document.getElementById('adminBtn').style.color = "#060d16";
+                    alert("Admin Mode ON! Ab aap saare locked secrets bina PIN ke unlock kar sakte hain.");
+                } else {
+                    alert("Wrong Admin Key!");
+                }
+            } else {
+                isAdmin = false;
+                document.getElementById('adminBtn').innerText = "🔐 Admin Mode: OFF";
+                document.getElementById('adminBtn').style.background = "rgba(255, 42, 109, 0.2)";
+                document.getElementById('adminBtn').style.color = "#ff2a6d";
+            }
+        }
     </script>
 </body>
 </html>
