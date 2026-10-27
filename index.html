@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jalpaiguri Med-Confessions (MBBS Community)</title>
+    <!-- EmailJS SDK Integration -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // Tamari EmailJS Public Key ahiya mako (EmailJS Account -> Public Key)
+            emailjs.init("YOUR_PUBLIC_KEY_HERE");
+        })();
+    </script>
     <style>
         * {
             margin: 0;
@@ -343,12 +351,12 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn-submit">Proceed to Verification 🔑</button>
+                <button type="submit" class="btn-submit" id="regSubmitBtn">Proceed to Verification 🔑</button>
             </form>
 
             <!-- 3. VERIFICATION FORM (REGISTRATION) -->
             <form id="verifyForm" class="form-section">
-                <p style="margin-bottom: 15px; color: #d4af37;">Verification code has been generated. Please enter the OTP shown in the popup.</p>
+                <p style="margin-bottom: 15px; color: #d4af37;">Verification code has been sent to your selected Email/Phone.</p>
                 <div class="form-group">
                     <label for="otpCode">Enter Verification Code (OTP):</label>
                     <input type="text" id="otpCode" placeholder="Enter OTP" required>
@@ -362,7 +370,7 @@
                     <label for="forgotUser">Username / Mobile / Email ID:</label>
                     <input type="text" id="forgotUser" placeholder="Enter Username, Mobile or Email" required>
                 </div>
-                <button type="submit" class="btn-submit">Send Reset OTP 🔑</button>
+                <button type="submit" class="btn-submit" id="forgotSubmitBtn">Send Reset OTP 🔑</button>
                 <a class="forgot-link" onclick="showForm('login')">⬅ Back to Login</a>
             </form>
 
@@ -397,6 +405,11 @@
 
         let forgotGeneratedOTP = null;
         let forgotTargetUserIndex = -1;
+
+        // EmailJS Constants
+        const EMAILJS_SERVICE_ID = "service_k4dev8a";
+        const EMAILJS_REG_TEMPLATE_ID = "template_jzlr718";
+        const EMAILJS_FORGOT_TEMPLATE_ID = "template_de2ig8g";
 
         function selectGender(element, gender) {
             document.querySelectorAll('.gender-btn').forEach(btn => btn.classList.remove('selected'));
@@ -508,9 +521,37 @@
             };
 
             generatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
-            alert("🔑 Your Verification Code (OTP) is: " + generatedOTP);
 
-            showForm('verify');
+            const submitBtn = document.getElementById('regSubmitBtn');
+            submitBtn.innerText = "Sending OTP...";
+            submitBtn.disabled = true;
+
+            if (verifyMode === 'email') {
+                const templateParams = {
+                    to_email: contactVal,
+                    to_name: username,
+                    otp: generatedOTP
+                };
+
+                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_REG_TEMPLATE_ID, templateParams)
+                    .then(function(response) {
+                        alert("📧 OTP has been sent to your email ID!");
+                        submitBtn.innerText = "Proceed to Verification 🔑";
+                        submitBtn.disabled = false;
+                        showForm('verify');
+                    }, function(error) {
+                        console.error("EmailJS Error:", error);
+                        alert("❌ Failed to send OTP via Email. Backup OTP shown: " + generatedOTP);
+                        submitBtn.innerText = "Proceed to Verification 🔑";
+                        submitBtn.disabled = false;
+                        showForm('verify');
+                    });
+            } else {
+                alert("🔑 Your Verification Code (OTP) is: " + generatedOTP);
+                submitBtn.innerText = "Proceed to Verification 🔑";
+                submitBtn.disabled = false;
+                showForm('verify');
+            }
         });
 
         document.getElementById('verifyForm').addEventListener('submit', function(e) {
@@ -587,8 +628,38 @@
 
             if (forgotTargetUserIndex !== -1) {
                 forgotGeneratedOTP = Math.floor(1000 + Math.random() * 9000).toString();
-                alert("🔑 Password Reset OTP is: " + forgotGeneratedOTP);
-                showForm('forgotVerify');
+                const targetUser = users[forgotTargetUserIndex];
+
+                const submitBtn = document.getElementById('forgotSubmitBtn');
+                submitBtn.innerText = "Sending Reset OTP...";
+                submitBtn.disabled = true;
+
+                if (targetUser.contact.includes('@')) {
+                    const templateParams = {
+                        to_email: targetUser.contact,
+                        to_name: targetUser.username,
+                        otp: forgotGeneratedOTP
+                    };
+
+                    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_FORGOT_TEMPLATE_ID, templateParams)
+                        .then(function(response) {
+                            alert("📧 Password Reset OTP sent to your email ID!");
+                            submitBtn.innerText = "Send Reset OTP 🔑";
+                            submitBtn.disabled = false;
+                            showForm('forgotVerify');
+                        }, function(error) {
+                            console.error("EmailJS Error:", error);
+                            alert("❌ Failed to send OTP via Email. Backup OTP shown: " + forgotGeneratedOTP);
+                            submitBtn.innerText = "Send Reset OTP 🔑";
+                            submitBtn.disabled = false;
+                            showForm('forgotVerify');
+                        });
+                } else {
+                    alert("🔑 Password Reset OTP is: " + forgotGeneratedOTP);
+                    submitBtn.innerText = "Send Reset OTP 🔑";
+                    submitBtn.disabled = false;
+                    showForm('forgotVerify');
+                }
             } else {
                 alert("❌ Username or Mobile/Email not found in records.");
             }
