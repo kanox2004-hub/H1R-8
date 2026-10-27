@@ -4,15 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jalpaiguri Med-Confessions (MBBS Community)</title>
-    
-    <!-- EmailJS SDK Script Integration -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script type="text/javascript">
-       (function(){
-          emailjs.init("fYU7jGIgAY8UOdItO"); // Aapki Public Key
-       })();
-    </script>
-
     <style>
         * {
             margin: 0;
@@ -317,18 +308,18 @@
                     <label for="branch">Select MBBS Specialization Branch:</label>
                     <select id="branch" required>
                         <option value="" disabled selected>-- Select Department --</option>
-                        <optgroup label="1. Pre-Clinical Departments (1st Year)" style="color: #d4af37; background: #162533;">
+                        <optgroup label="1. Pre-Clinical Departments" style="color: #d4af37; background: #162533;">
                             <option value="Anatomy">Anatomy</option>
                             <option value="Physiology">Physiology</option>
                             <option value="Biochemistry">Biochemistry</option>
                         </optgroup>
-                        <optgroup label="2. Para-Clinical Departments (2nd Year)" style="color: #d4af37; background: #162533;">
+                        <optgroup label="2. Para-Clinical Departments" style="color: #d4af37; background: #162533;">
                             <option value="Pathology">Pathology</option>
                             <option value="Microbiology">Microbiology</option>
                             <option value="Pharmacology">Pharmacology</option>
                             <option value="FMT">Forensic Medicine & Toxicology - FMT</option>
                         </optgroup>
-                        <optgroup label="3. Clinical Departments (3rd / Final Year)" style="color: #d4af37; background: #162533;">
+                        <optgroup label="3. Clinical Departments" style="color: #d4af37; background: #162533;">
                             <option value="General Medicine">General Medicine</option>
                             <option value="General Surgery">General Surgery</option>
                             <option value="Gynecology & Obstetrics">Gynecology & Obstetrics</option>
@@ -464,7 +455,6 @@
             return Math.abs(ageDate.getUTCFullYear() - 1970);
         }
 
-        // 1. REGISTER FORM SUBMIT & SEND OTP VIA EMAILJS
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -518,25 +508,9 @@
             };
 
             generatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
+            alert("🔑 Your Verification Code (OTP) is: " + generatedOTP);
 
-            // Agar user ne Email select kiya hai toh EmailJS se email bhejein, warna phone ke liye alert dikhayein
-            if (verifyMode === 'email') {
-                // Loading message dikha sakte hain ya seedha email bhej sakte hain
-                emailjs.send("service_k4dev8a", "service_k4dev8a", {
-                    to_email: contactVal,
-                    otp_code: generatedOTP
-                })
-                .then(function(response) {
-                    alert("✅ OTP successfully sent to your Gmail ID!");
-                    showForm('verify');
-                }, function(error) {
-                    alert("❌ Failed to send OTP via Email. Please check console.");
-                    console.log(error);
-                });
-            } else {
-                alert("🔑 Phone OTP (Simulation): " + generatedOTP);
-                showForm('verify');
-            }
+            showForm('verify');
         });
 
         document.getElementById('verifyForm').addEventListener('submit', function(e) {
@@ -603,7 +577,7 @@
             window.location.href = 'jgmch2.html';
         });
 
-        // Step 1: Request Password Reset OTP via EmailJS
+        // Step 1: Request Password Reset OTP
         document.getElementById('forgotForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const inputUser = document.getElementById('forgotUser').value.trim();
@@ -613,26 +587,8 @@
 
             if (forgotTargetUserIndex !== -1) {
                 forgotGeneratedOTP = Math.floor(1000 + Math.random() * 9000).toString();
-                let targetUserObj = users[forgotTargetUserIndex];
-
-                // Check karein ki user ke paas email hai ya nahi
-                if (targetUserObj.contact && targetUserObj.contact.includes('@gmail.com')) {
-                    emailjs.send("service_k4dev8a", "service_k4dev8a", {
-                        to_email: targetUserObj.contact,
-                        otp_code: forgotGeneratedOTP
-                    })
-                    .then(function(response) {
-                        alert("✅ Password Reset OTP sent to your registered Gmail ID!");
-                        showForm('forgotVerify');
-                    }, function(error) {
-                        alert("❌ Failed to send Reset OTP. Try again.");
-                        console.log(error);
-                    });
-                } else {
-                    // Agar phone number hua toh alert se dikha dega
-                    alert("🔑 Password Reset OTP: " + forgotGeneratedOTP);
-                    showForm('forgotVerify');
-                }
+                alert("🔑 Password Reset OTP is: " + forgotGeneratedOTP);
+                showForm('forgotVerify');
             } else {
                 alert("❌ Username or Mobile/Email not found in records.");
             }
