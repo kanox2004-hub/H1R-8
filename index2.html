@@ -1221,11 +1221,8 @@
 
         function userLogout() {
             localStorage.removeItem('currentUser');
-            const newUser = prompt("Enter new username to log in:");
-            if (newUser) {
-                localStorage.setItem('currentUser', newUser.trim());
-                location.reload();
-            }
+            // Direct logout without showing prompt box, redirects to login page (index.html)
+            window.location.href = 'index.html';
         }
 
         async function fetchDb() {
@@ -1867,7 +1864,7 @@
             if (!db.allConfessions) db.allConfessions = [];
             db.allConfessions.unshift({ 
                 id: 'c_' + Date.now(), 
-                author: currentUser, // <-- Yeh author ka naam save karega
+                author: currentUser, 
                 text: text, 
                 category: category 
             });
@@ -1892,7 +1889,6 @@
 
             box.innerHTML = '';
             list.forEach(c => {
-                // Agar Admin Mode ON hai toh author dikhega, warna 'Anonymous'
                 let authorDisplay = isAdmin ? `Shared by @${c.author || 'Anonymous'}` : `🎭 Anonymous`;
                 let deleteBtnHtml = isAdmin ? `<button class="btn-delete" style="position:absolute; top:15px; right:15px; font-size:11px;" onclick="deleteConfession('${c.id}')"><i class="fa-solid fa-trash"></i> Delete</button>` : '';
 
