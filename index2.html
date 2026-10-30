@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MED-CONFESSIONS | Jalpaiguri Medical College</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: #060d16;
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            animation: fadeInBody 0.8s ease-in-out;
+        }
+
+        @keyframes fadeInBody {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* SECURITY OVERLAY */
+        #securityBlurOverlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(6, 13, 22, 0.98);
+            backdrop-filter: blur(25px);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #ff2a6d;
+            text-align: center;
+        }
+        #securityBlurOverlay i {
+            font-size: 50px;
+            margin-bottom: 15px;
+            animation: bounce 1.5s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* HEADER */
+        header {
+            background: rgba(10, 25, 41, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-title {
+            color: #00f2fe;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+        }
+
+        .user-badge {
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid #00f2fe;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #00f2fe;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .user-badge:hover {
+            box-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
+        }
+
+        .btn-logout {
+            background: rgba(255, 42, 109, 0.2);
+            border: 1px solid #ff2a6d;
+            color: #ff2a6d;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-logout:hover {
+            background: #ff2a6d;
+            color: #fff;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-share-main {
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            color: #060d16;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+        .btn-share-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
+        }
+
+        .btn-admin {
+            background: rgba(255, 42, 109, 0.2);
+            border: 1px solid #ff2a6d;
+            color: #ff2a6d;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 102;
+        }
+        .btn-admin:hover {
+            box-shadow: 0 0 15px rgba(255, 42, 109, 0.5);
+        }
+
+        /* ADMIN STORAGE BADGE */
+        .admin-storage-badge {
+            display: none;
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid #ffd700;
+            color: #ffd700;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: #0a1726;
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px;
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .nav-tab {
+            color: #94a3b8;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-tab.active, .nav-tab:hover {
+            background: #00f2fe;
+            color: #060d16;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* CONTAINER & TAB ANIMATIONS */
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .tab-content-section {
+            display: none;
+            animation: fadeInTab 0.5s ease-in-out forwards;
+        }
+        .tab-content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeInTab {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* STORIES BAR */
+        .stories-container {
+            background: rgba(15, 28, 44, 0.8);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            overflow-x: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .story-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            min-width: 65px;
+            transition: transform 0.3s;
+        }
+        .story-item:hover {
+            transform: scale(1.05);
+        }
+
+        .story-avatar-wrapper {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            padding: 2px;
+            background: linear-gradient(45deg, #ff758c, #00f2fe);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+        }
+
+        .story-avatar-wrapper.add-story-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed #00f2fe;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #00f2fe;
+            font-size: 20px;
+        }
+
+        .story-img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #060d16;
+        }
+
+        .story-username {
+            font-size: 11px;
+            color: #cbd5e1;
+        }
+
+        /* INSTAGRAM STYLE DIRECT DM & GROUP CONTAINER IN ORIGINAL THEME */
+        .insta-dm-wrapper {
+            background: rgba(15, 28, 44, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            border-radius: 14px;
+            min-height: 580px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .insta-search-box {
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .insta-search-input {
+            width: 100%;
+            background: #060d16;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: #fff;
+            outline: none;
+        }
+
+        .insta-notes-bar {
+            display: flex;
+            gap: 16px;
+            padding: 12px 18px;
+            overflow-x: auto;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .insta-note-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            min-width: 72px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .insta-note-cloud {
+            background: rgba(0, 242, 254, 0.15);
+            border: 1px solid #00f2fe;
+            color: #00f2fe;
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            position: absolute;
+            top: -10px;
+            max-width: 80px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            box-shadow: 0 2px 8px rgba(0, 242, 254, 0.3);
+        }
+
+        .insta-avatar-circle {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00f2fe, #ff758c);
+            padding: 2px;
+            margin-top: 6px;
+        }
+
+        .insta-avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #060d16;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #00f2fe;
+            font-size: 18px;
+            border: 2px solid #060d16;
+        }
+
+        .insta-note-name {
+            font-size: 11px;
+            color: #cbd5e1;
+            max-width: 70px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: center;
+        }
+
+        .insta-chat-header-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px 8px 18px;
+        }
+
+        .insta-messages-label {
+            font-size: 15px;
+            font-weight: 700;
+            color: #00f2fe;
+        }
+
+        .insta-requests-label {
+            font-size: 13px;
+            color: #ff758c;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .insta-chat-list {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .insta-chat-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 18px;
+            gap: 14px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transition: background 0.2s;
+        }
+
+        .insta-chat-item:hover {
+            background: rgba(0, 242, 254, 0.05);
+        }
+
+        .insta-chat-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid #00f2fe;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            color: #00f2fe;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .insta-chat-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .insta-chat-username {
+            font-size: 14px;
+            font-weight: 600;
+            color: #f8fafc;
+        }
+
+        .insta-chat-lastmsg {
+            font-size: 12px;
+            color: #94a3b8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* FULL PAGE CHAT SCREEN OVERLAY */
+        .insta-full-chat-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #060d16;
+            z-index: 9999;
+            flex-direction: column;
+        }
+
+        .insta-full-chat-header {
+            padding: 12px 20px;
+            background: rgba(10, 25, 41, 0.98);
+            border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .insta-back-btn {
+            font-size: 20px;
+            color: #00f2fe;
+            cursor: pointer;
+            margin-right: 14px;
+        }
+
+        .insta-chat-scroll {
+            flex: 1;
+            padding: 18px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #060d16;
+        }
+
+        .msg-bubble {
+            max-width: 75%;
+            padding: 10px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.4;
+            animation: msgPop 0.2s ease-out;
+            position: relative;
+        }
+
+        @keyframes msgPop {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .msg-bubble.sent {
+            background: #00f2fe;
+            color: #060d16;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+            font-weight: 500;
+        }
+
+        .msg-bubble.received {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .btn-msg-del {
+            background: none;
+            border: none;
+            color: #ff2a6d;
+            cursor: pointer;
+            font-size: 11px;
+            margin-left: 8px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .btn-msg-del:hover {
+            opacity: 1;
+        }
+
+        .insta-chat-input-bar {
+            padding: 12px 20px;
+            background: rgba(10, 25, 41, 0.98);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insta-chat-input {
+            flex: 1;
+            background: #060d16;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 10px 16px;
+            color: #fff;
+            outline: none;
+        }
+
+        /* CARDS & FORMS */
+        .post-form-card {
+            background: rgba(15, 28, 44, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        textarea, input[type="text"], input[type="number"], input[type="password"], select {
+            width: 100%;
+            background: #060d16;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px 12px;
+            color: #fff;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        textarea { height: 90px; resize: none; margin-bottom: 12px; }
+        textarea:focus, input:focus, select:focus { 
+            border-color: #00f2fe; 
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+        }
+
+        .btn-post {
+            background: linear-gradient(135deg, #00f2fe, #00f5a0);
+            color: #060d16;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-post:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 0 15px rgba(0, 245, 160, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .card-post {
+            background: rgba(15, 28, 44, 0.75);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .media-preview-box {
+            width: 100%;
+            max-height: 380px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            background: #000;
+        }
+        .media-preview-box img, .media-preview-box video, .media-preview-box audio {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .pill-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #94a3b8;
+            padding: 6px 14px;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+        .pill-btn.active, .pill-btn:hover {
+            background: #00f2fe;
+            color: #060d16;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+        }
+
+        /* ADMIN MANAGEMENT TABLE */
+        .admin-table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+        .admin-user-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            text-align: left;
+        }
+        .admin-user-table th, .admin-user-table td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .admin-user-table th {
+            background: rgba(0, 242, 254, 0.1);
+            color: #00f2fe;
+        }
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        .status-active { background: rgba(0, 245, 160, 0.2); color: #00f5a0; border: 1px solid #00f5a0; }
+        .status-banned { background: rgba(255, 42, 109, 0.2); color: #ff2a6d; border: 1px solid #ff2a6d; }
+
+        .btn-delete {
+            background: rgba(255, 42, 109, 0.15);
+            border: 1px solid #ff2a6d;
+            color: #ff2a6d;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .btn-delete:hover {
+            background: #ff2a6d;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 42, 109, 0.5);
+        }
+
+        .btn-action-small {
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid;
+            margin-right: 4px;
+        }
+        .btn-reset-pass { background: rgba(0, 242, 254, 0.15); border-color: #00f2fe; color: #00f2fe; }
+        .btn-reset-pass:hover { background: #00f2fe; color: #060d16; }
+        .btn-unban { background: rgba(0, 245, 160, 0.15); border-color: #00f5a0; color: #00f5a0; }
+        .btn-unban:hover { background: #00f5a0; color: #060d16; }
+
+        /* PERMANENT BAN CARD & CLEAR DATA BUTTON FIXED FOR CLICKS */
+        .permanent-ban-card {
+            border: 1px solid rgba(255, 42, 109, 0.4);
+            background: rgba(255, 42, 109, 0.05);
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .btn-perm-ban {
+            background: rgba(255, 42, 109, 0.25);
+            border: 1px solid #ff2a6d;
+            color: #ff2a6d;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+            position: relative;
+            z-index: 10;
+        }
+        .btn-perm-ban:hover {
+            background: #ff2a6d;
+            color: #fff;
+            box-shadow: 0 0 12px rgba(255, 42, 109, 0.6);
+        }
+
+        .btn-clear-server {
+            width: 100%;
+            padding: 12px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            background: rgba(255, 42, 109, 0.2);
+            border: 1px solid #ff2a6d;
+            color: #ff2a6d;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+        .btn-clear-server:hover {
+            background: #ff2a6d;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 42, 109, 0.6);
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .modal-content-box {
+            background: #0f1c2c;
+            border: 1px solid #00f2fe;
+            width: 90%;
+            max-width: 450px;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0, 242, 254, 0.2);
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <!-- SECURITY OVERLAY -->
+    <div id="securityBlurOverlay">
+        <i class="fa-solid fa-user-shield"></i>
+        <h2>🔒 Security Protected Content</h2>
+        <p style="font-size: 13px; color: #94a3b8; margin-top: 5px;">Screenshots are disabled for privacy safety.</p>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo-section">
+            <span style="font-size: 24px;">🩺</span>
+            <div class="logo-title">Jalpaiguri Medical Confessions</div>
+        </div>
+
+        <div class="user-badge" id="userInfo">
+            <span id="userHandle">@User</span>
+            <button class="btn-logout" onclick="userLogout()">Logout</button>
+        </div>
+
+        <div class="admin-storage-badge" id="adminStorageBadge">
+            <i class="fa-solid fa-hard-drive"></i> PC Storage: <span id="storageSizeVal">0 KB</span>
+        </div>
+
+        <div class="header-actions">
+            <button class="btn-share-main" onclick="copyWebsiteLink()"><i class="fa-solid fa-link"></i> Share</button>
+            <button class="btn-admin" id="adminBtn" onclick="toggleAdminMode()"><i class="fa-solid fa-lock"></i> Admin: OFF</button>
+        </div>
+    </header>
+
+    <!-- HORIZONTAL NAVBAR -->
+    <nav class="navbar">
+        <button class="nav-tab active" onclick="switchMainTab('feed', this)"><i class="fa-solid fa-house"></i> All Feed</button>
+        <button class="nav-tab" onclick="switchMainTab('readConfessions', this)"><i class="fa-solid fa-book-open"></i> Uploaded Confessions</button>
+        <button class="nav-tab" onclick="switchMainTab('writeConfession', this)"><i class="fa-solid fa-pen-nib"></i> Write Confession</button>
+        <button class="nav-tab" onclick="switchMainTab('groupchat', this)"><i class="fa-solid fa-users"></i> Group Chat</button>
+        <button class="nav-tab" onclick="switchMainTab('randomchat', this)"><i class="fa-solid fa-shuffle"></i> Random Chat / ❤️</button>
+        <button class="nav-tab" onclick="switchMainTab('dm', this)"><i class="fa-solid fa-paper-plane"></i> Direct DM</button>
+        <button class="nav-tab" onclick="switchMainTab('profile', this)"><i class="fa-solid fa-user-gear"></i> User Profile</button>
+        <button class="nav-tab" onclick="switchMainTab('vault', this)"><i class="fa-solid fa-folder-open"></i> Open Vault (Movies/PDF)</button>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+
+        <!-- 1. ALL FEED TAB -->
+        <div id="feedTab" class="tab-content-section active">
+            <!-- STORIES BAR -->
+            <div class="stories-container" id="storiesBar">
+                <div class="story-item" id="addStoryBtnWrapper" style="display: none;" onclick="openModal('storyModal')">
+                    <div class="story-avatar-wrapper add-story-btn"><i class="fa-solid fa-plus"></i></div>
+                    <span class="story-username">Add Story</span>
+                </div>
+            </div>
+
+            <!-- PUBLIC POST CREATOR -->
+            <div class="post-form-card">
+                <h4 style="color: #00f2fe; margin-bottom: 10px;">💬 Post to All Feed</h4>
+                <textarea id="feedPostText" placeholder="Share something with college feed... (Links allowed)"></textarea>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label style="cursor: pointer; color: #00f2fe; font-size: 13px;">
+                        <i class="fa-solid fa-photo-film"></i> Photo/Video/Audio
+                        <input type="file" id="feedMediaInput" accept="image/*,video/*,audio/*" style="display:none;">
+                    </label>
+                    <button class="btn-post" onclick="submitFeedPost()">Post Feed 🚀</button>
+                </div>
+            </div>
+
+            <div id="feedList"></div>
+        </div>
+
+        <!-- 2. READ CONFESSIONS TAB -->
+        <div id="readConfessionsTab" class="tab-content-section">
+            <h3 style="color: #00f2fe; margin-bottom: 15px;">📖 Read Confessions</h3>
+            
+            <div class="filter-pills">
+                <button class="pill-btn active" onclick="filterReadConfessions('All', this)">All 🌟</button>
+                <button class="pill-btn" onclick="filterReadConfessions('Normal', this)">Normal 📝</button>
+                <button class="pill-btn" onclick="filterReadConfessions('Sad', this)">Sad 💧</button>
+                <button class="pill-btn" onclick="filterReadConfessions('Love', this)">Love 💖</button>
+                <button class="pill-btn" onclick="filterReadConfessions('Funny', this)">Funny 😂</button>
+            </div>
+
+            <div id="readConfessionCards"></div>
+        </div>
+
+        <!-- 3. WRITE CONFESSION TAB -->
+        <div id="writeConfessionTab" class="tab-content-section">
+            <div class="post-form-card">
+                <h3 style="color: #00f2fe; margin-bottom: 12px;">✍️ Write Secret Confession</h3>
+                <p style="font-size: 12px; color: #94a3b8; margin-bottom: 15px;">🔒 Your identity is 100% hidden. Nobody will know who wrote this.</p>
+                
+                <textarea id="confessionText" placeholder="Write your secret confession or paste link here..."></textarea>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px;">
+                    <div>
+                        <label style="font-size: 12px; color: #94a3b8;">Category:</label>
+                        <select id="confessionCat">
+                            <option value="All">All 🌟</option>
+                            <option value="Normal">Normal 📝</option>
+                            <option value="Love">Love 💖</option>
+                            <option value="Sad">Sad 💧</option>
+                            <option value="Funny">Funny 😂</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 12px; color: #94a3b8;">Media File (Optional):</label>
+                        <input type="file" id="confessionMedia" accept="image/*,video/*,audio/*">
+                    </div>
+                </div>
+
+                <button class="btn-post" style="width: 100%;" onclick="submitConfession()">Submit Confession 🚀</button>
+            </div>
+        </div>
+
+        <!-- 4. GROUP CHAT -->
+        <div id="groupChatTab" class="tab-content-section">
+            <div class="insta-dm-wrapper">
+                <div class="insta-search-box">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <span style="font-size:16px; font-weight:bold; color:#00f2fe;">Group Chats</span>
+                        <button class="btn-post" style="padding:4px 10px; font-size:12px;" onclick="openModal('createGroupModal')">+ New Group</button>
+                    </div>
+                    <input type="text" class="insta-search-input" id="groupSearch" placeholder="🔍 Search groups..." onkeyup="renderGroups()">
+                </div>
+
+                <div class="insta-chat-header-title">
+                    <span class="insta-messages-label">Groups <i class="fa-solid fa-chevron-down" style="font-size:12px;"></i></span>
+                    <span class="insta-requests-label">Public / Private</span>
+                </div>
+
+                <div class="insta-chat-list" id="groupList"></div>
+            </div>
+        </div>
+
+        <!-- 5. RANDOM CHAT / ❤️ -->
+        <div id="randomChatTab" class="tab-content-section">
+            <div class="post-form-card" style="max-width:550px; margin:0 auto;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <h3 style="color:#00f2fe;">🔀 Random Match / ❤️</h3>
+                    <button class="btn-delete" id="btnRandomExit" style="display:none; font-size:11px;" onclick="exitRandomChat()">🚪 Exit Chat</button>
+                </div>
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:15px 0;" id="randomMatchConfigBox">
+                    <div>
+                        <label style="font-size:12px;">My Gender:</label>
+                        <select id="myGender"><option>Boy</option><option>Girl</option></select>
+                    </div>
+                    <div>
+                        <label style="font-size:12px;">Interested In:</label>
+                        <select id="targetGender"><option>Girl</option><option>Boy</option><option>Any</option></select>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;" id="randomAgeBox">
+                    <div><label style="font-size:12px;">Min Age:</label><input type="number" id="minAge" value="18"></div>
+                    <div><label style="font-size:12px;">Max Age:</label><input type="number" id="maxAge" value="25"></div>
+                </div>
+
+                <button class="btn-post" id="btnFindMatch" style="width:100%;" onclick="startRandomChat()">Find Stranger Match 🚀</button>
+
+                <div class="insta-chat-scroll" id="randomChatBox" style="height:220px; margin-top:15px; border-radius:8px; background:#060d16; display:none;"></div>
+                
+                <div style="display:flex; gap:8px; margin-top:10px; display:none;" id="randomInputBox">
+                    <input type="text" id="randomInput" placeholder="Message stranger...">
+                    <button class="btn-post" onclick="sendRandomMsg()">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. DIRECT DM -->
+        <div id="dmTab" class="tab-content-section">
+            <div class="insta-dm-wrapper">
+                <div class="insta-search-box">
+                    <input type="text" class="insta-search-input" id="dmSearch" placeholder="🔍 Search User..." onkeyup="renderDmList()">
+                </div>
+
+                <div class="insta-notes-bar" id="instaNotesBar"></div>
+
+                <div class="insta-chat-header-title">
+                    <span class="insta-messages-label">Messages <i class="fa-solid fa-chevron-down" style="font-size:12px;"></i></span>
+                    <span class="insta-requests-label">Requests</span>
+                </div>
+
+                <div class="insta-chat-list" id="dmUserList"></div>
+            </div>
+        </div>
+
+        <!-- 7. USER PROFILE & SEARCH -->
+        <div id="profileTab" class="tab-content-section">
+            <div class="post-form-card">
+                <h3 style="color:#00f2fe; margin-bottom:15px;">👤 Profile & User Search</h3>
+                
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
+                    <div>
+                        <h4 id="myProfileName">@User</h4>
+                        <span style="font-size:12px; color:#94a3b8;" id="myFollowersCount">
+                            Followers: <strong style="color:#00f2fe; cursor:pointer; text-decoration:underline;" onclick="openFollowModal('followers')">0</strong> | 
+                            Following: <strong style="color:#00f2fe; cursor:pointer; text-decoration:underline;" onclick="openFollowModal('following')">0</strong>
+                        </span>
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <button class="btn-post" style="padding:5px 10px; font-size:11px;" onclick="shareMyProfileLink()">🔗 Share Profile</button>
+                        <div>
+                            <label style="font-size:12px; margin-right:5px;">Privacy:</label>
+                            <select id="profilePrivacyToggle" style="width:auto;" onchange="togglePrivacySetting()">
+                                <option value="Public">Public 🌐</option>
+                                <option value="Private">Private 🔒</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="color:#00f2fe; margin-bottom:10px;">🔍 Search Other Users:</h4>
+                <input type="text" id="userSearchInput" placeholder="Type username..." onkeyup="searchUsers()">
+                <div id="searchUserResults" style="margin-top:12px;"></div>
+
+                <!-- ADMIN CONTROL & DATA RESET PANEL -->
+                <div id="adminGlobalBanSection" style="margin-top: 25px; display: none; border-top: 1px solid rgba(255,42,109,0.3); padding-top: 15px;">
+                    <h4 style="color:#ffd700; margin-bottom:8px;"><i class="fa-solid fa-microchip"></i> Admin PC Storage & Data Reset Panel</h4>
+                    <p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">
+                        Current Server Data Storage: <strong id="profileStorageVal" style="color:#ffd700;">0 KB</strong>
+                    </p>
+                    <button class="btn-clear-server" onclick="clearServerDataKeepUsers()">
+                        🗑️ Clear All Server Data (Keep User Accounts Safe)
+                    </button>
+
+                    <!-- ADMIN USER MANAGEMENT TABLE -->
+                    <h4 style="color:#00f2fe; margin-bottom:8px;"><i class="fa-solid fa-users-gear"></i> Registered User Accounts Management</h4>
+                    <p style="font-size:12px; color:#94a3b8; margin-bottom:10px;">Manage passwords, account bans, and deletions safely:</p>
+                    
+                    <div class="admin-table-container">
+                        <table class="admin-user-table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Joined Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUserTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- PERMANENT GLOBAL USER BAN CARD -->
+                    <div class="permanent-ban-card">
+                        <h4 style="color:#ff2a6d; margin-bottom:6px;"><i class="fa-solid fa-crown"></i> Permanent Global User Ban</h4>
+                        <p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">Permanently block a user from accessing or logging into this entire application:</p>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <input type="text" id="globalBanInput" placeholder="Enter exact username to ban..." style="flex:1;">
+                            <button class="btn-perm-ban" onclick="executeGlobalBan()">Permanent Ban</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. OPEN VAULT -->
+        <div id="vaultTab" class="tab-content-section">
+            <div class="post-form-card">
+                <h3 style="color:#00f2fe; margin-bottom:10px;">📁 Open Share Vault (Movies / PDFs / Files)</h3>
+                <p style="font-size:12px; color:#94a3b8; margin-bottom:15px;">Upload or share Telegram movie links, PDFs, photos & files directly for everyone.</p>
+
+                <textarea id="vaultTitle" placeholder="File Title or Movie Name..."></textarea>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;">
+                    <input type="text" id="vaultLink" placeholder="Paste Direct Download / Telegram Link...">
+                    <input type="file" id="vaultFile" accept="image/*,video/*,audio/*,.pdf,.zip,.rar" style="color:#fff;">
+                </div>
+
+                <button class="btn-post" style="width:100%;" onclick="submitVaultItem()">Share to Open Vault 🚀</button>
+            </div>
+
+            <div id="vaultItemsList"></div>
+        </div>
+
+    </div>
+
+    <!-- INSTAGRAM FULL CHAT SCREEN OVERLAY -->
+    <div class="insta-full-chat-screen" id="instaFullChatScreen">
+        <div class="insta-full-chat-header">
+            <div style="display:flex; align-items:center;">
+                <i class="fa-solid fa-arrow-left insta-back-btn" onclick="closeFullChatScreen()"></i>
+                <div class="insta-chat-avatar" id="chatHeaderAvatar" style="width:38px; height:38px; font-size:14px; margin-right:10px;">@</div>
+                <div>
+                    <div style="font-weight:bold; font-size:15px; color:#fff;" id="chatHeaderTitle">User Chat</div>
+                    <div style="font-size:11px; color:#00f5a0;" id="chatHeaderSubtitle">Active now</div>
+                </div>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <button class="btn-post" id="groupSettingsBtn" onclick="openGroupManageModal()" style="display:none; padding:4px 8px; font-size:11px;">⚙️ Settings</button>
+                <button class="btn-post" id="setPassBtn" onclick="openChatPasswordModal()" style="display:none; padding:4px 8px; font-size:11px;">🔒 Pass</button>
+                <button class="btn-delete" id="blockBtn" onclick="toggleBlockUser()" style="display:none;">Block</button>
+            </div>
+        </div>
+
+        <div class="insta-chat-scroll" id="fullChatMessages"></div>
+
+        <div class="insta-chat-input-bar">
+            <label style="cursor:pointer; color:#00f2fe; font-size:20px;">
+                <i class="fa-solid fa-image"></i>
+                <input type="file" id="chatFileInput" accept="image/*,video/*,audio/*" style="display:none;" onchange="sendMediaMsg()">
+            </label>
+            <input type="text" class="insta-chat-input" id="chatInputMsg" placeholder="Message...">
+            <button class="btn-post" onclick="sendFullChatMsg()">Send</button>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <div class="modal-overlay" id="manageGroupModal">
+        <div class="modal-content-box">
+            <h3 style="color:#00f2fe; margin-bottom:12px;">⚙️ Group Admin Settings</h3>
+            <div style="margin-bottom:12px;">
+                <label style="font-size:12px; color:#94a3b8;">Group Privacy:</label>
+                <select id="editGPrivacy" onchange="toggleEditGroupPassField()">
+                    <option value="Public">Public 🌐</option>
+                    <option value="Private">Private 🔒</option>
+                </select>
+            </div>
+            <div id="editGPassWrap" style="display:none; margin-bottom:12px;">
+                <label style="font-size:12px; color:#94a3b8;">Set/Change Password:</label>
+                <input type="text" id="editGPass" placeholder="Enter password">
+            </div>
+            <button class="btn-post" style="width:100%; margin-bottom:15px;" onclick="saveGroupSettings()">Save Group Settings</button>
+
+            <h4 style="color:#ff2a6d; margin-bottom:8px;"><i class="fa-solid fa-users-slash"></i> Member Management (Block/Kick)</h4>
+            <div id="groupMembersList" style="max-height:180px; overflow-y:auto; margin-bottom:12px;"></div>
+
+            <button onclick="closeModal('manageGroupModal')" style="background:none; border:none; color:#fff; cursor:pointer; width:100%;">Close</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="followModal">
+        <div class="modal-content-box">
+            <h3 id="followModalTitle" style="color:#00f2fe; margin-bottom:12px;">Users List</h3>
+            <div id="followModalList" style="max-height:250px; overflow-y:auto; margin-bottom:15px;"></div>
+            <button onclick="closeModal('followModal')" style="background:none; border:none; color:#fff; cursor:pointer; width:100%;">Close</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="adminPasswordModal">
+        <div class="modal-content-box">
+            <h3 style="color:#00f2fe; margin-bottom:12px;"><i class="fa-solid fa-lock"></i> Admin Authentication</h3>
+            <p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">Please enter the master admin password to enable Admin Mode:</p>
+            <input type="password" id="adminPasswordInput" placeholder="Enter Password..." style="margin-bottom:15px;">
+            <button class="btn-post" style="width:100%;" onclick="verifyAdminPassword()">Login Admin Mode 🚀</button>
+            <button onclick="closeModal('adminPasswordModal')" style="background:none; border:none; color:#fff; margin-top:10px; cursor:pointer; width:100%;">Cancel</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="createGroupModal">
+        <div class="modal-content-box">
+            <h3 style="color:#00f2fe; margin-bottom:12px;">Create New Group</h3>
+            <input type="text" id="newGName" placeholder="Group Name" style="margin-bottom:10px;">
+            <select id="newGPrivacy" style="margin-bottom:10px;" onchange="toggleCreateGroupPassField()">
+                <option value="Public">Public 🌐</option>
+                <option value="Private">Private 🔒</option>
+            </select>
+            <div id="createGroupPassWrap" style="display:none; margin-bottom:10px;">
+                <input type="text" id="newGPass" placeholder="Set Password">
+            </div>
+            <button class="btn-post" style="width:100%; margin-top:10px;" onclick="submitGroup()">Create Group 🚀</button>
+            <button onclick="closeModal('createGroupModal')" style="background:none; border:none; color:#fff; margin-top:10px; cursor:pointer; width:100%;">Cancel</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="chatPasswordModal">
+        <div class="modal-content-box">
+            <h3 style="color:#00f2fe; margin-bottom:12px;">🔒 Set Private Chat Password</h3>
+            <input type="text" id="chatPassInput" placeholder="Enter password..." style="margin-bottom:15px;">
+            <button class="btn-post" style="width:100%;" onclick="saveChatPassword()">Save Password</button>
+            <button onclick="closeModal('chatPasswordModal')" style="background:none; border:none; color:#fff; margin-top:10px; cursor:pointer; width:100%;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT CODE -->
+    <script>
+        const API_URL = 'https://k77mm.aiccloud.online';
+        let isAdmin = false;
+        let currentUser = localStorage.getItem('currentUser') || 'Doctor_' + Math.floor(Math.random() * 899 + 100);
+        let activeChatType = 'dm';
+        let activeChatTarget = null;
+        let currentConfessionFilter = 'All';
+
+        localStorage.setItem('currentUser', currentUser);
+
+        const RESTRICTED_WORDS = ['badword1', 'badword2', 'abuse', 'hate', 'spam'];
+        const SUSPICIOUS_DOMAINS = ['phishing-scam.com', 'malware-site.net', 'hacktool.ru'];
+
+        function checkSuspiciousLink(text) {
+            if (!text) return false;
+            const lowerText = text.toLowerCase();
+            for (let domain of SUSPICIOUS_DOMAINS) {
+                if (lowerText.includes(domain)) return true;
+            }
+            return false;
+        }
+
+        function linkifyText(inputText) {
+            if (!inputText) return '';
+            const urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+            return inputText.replace(urlRegex, function(url) {
+                return `<a href="${url}" target="_blank" style="color: #00f2fe; text-decoration: underline;">${url}</a>`;
+            });
+        }
+
+        window.addEventListener('blur', () => document.getElementById('securityBlurOverlay').style.display = 'flex');
+        window.addEventListener('focus', () => document.getElementById('securityBlurOverlay').style.display = 'none');
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            document.getElementById('userHandle').innerText = `@${currentUser}`;
+            document.getElementById('myProfileName').innerText = `@${currentUser}`;
+            
+            await registerUserAccount(currentUser);
+
+            try {
+                const res = await fetch(`${API_URL}/api/data`);
+                const db = await res.json();
+                const globalBannedList = db.globalBannedUsers || [];
+                if (globalBannedList.includes(currentUser)) {
+                    alert("❌ Your account has been permanently banned from this application by the Admin.");
+                    document.body.innerHTML = '<div style="background:#060d16; color:#ff2a6d; height:100vh; display:flex; justify-content:center; align-items:center; flex-direction:column; text-align:center;"><h1>🚫 Access Denied</h1><p>You are permanently blocked from accessing this application.</p></div>';
+                    return;
+                }
+            } catch (err) {}
+
+            loadFeed();
+            loadStories();
+            renderGroups();
+            renderDmList();
+            renderVaultItems();
+            updateFollowStats();
+        });
+
+        async function registerUserAccount(username) {
+            let db = await fetchDb();
+            if (!db) return;
+            if (!db.userAccounts) db.userAccounts = [];
+            let existing = db.userAccounts.find(u => u.username === username);
+            if (!existing) {
+                db.userAccounts.push({ username: username, joinedDate: new Date().toLocaleDateString(), isBanned: false });
+                await saveDb(db);
+            }
+        }
+
+        function userLogout() {
+            localStorage.removeItem('currentUser');
+            // Direct logout without showing prompt box, redirects to login page (index.html)
+            window.location.href = 'index.html';
+        }
+
+        async function fetchDb() {
+            try {
+                const res = await fetch(`${API_URL}/api/data`);
+                return await res.json();
+            } catch (err) {
+                return null;
+            }
+        }
+
+        async function saveDb(updatedData) {
+            try {
+                await fetch(`${API_URL}/api/data`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedData)
+                });
+                if (isAdmin) updateStorageSizeDisplay();
+            } catch (err) {}
+        }
+
+        async function updateStorageSizeDisplay() {
+            let db = await fetchDb();
+            if (!db) return;
+            const bytes = new Blob([JSON.stringify(db)]).size;
+            let displaySize = (bytes >= 1024 * 1024) ? (bytes / (1024 * 1024)).toFixed(2) + ' MB' : (bytes / 1024).toFixed(2) + ' KB';
+            document.getElementById('storageSizeVal').innerText = displaySize;
+            document.getElementById('profileStorageVal').innerText = displaySize;
+        }
+
+        async function clearServerDataKeepUsers() {
+            if (!isAdmin) return alert("Admin access required!");
+            if (!confirm("⚠️ Delete ALL posts, media, chats, and vault files? User Accounts will NOT be deleted.")) return;
+
+            let db = await fetchDb();
+            if (!db) return;
+
+            const preservedAccounts = db.userAccounts || [];
+            const preservedBanned = db.globalBannedUsers || [];
+
+            db.allConfessions = [];
+            db.allFeedPosts = [];
+            db.portalStories = [];
+            db.openVaultItems = [];
+            db.groupMessages = {};
+            db.directMessages = {};
+            db.groupsList = [];
+            db.chatPasswords = {};
+
+            db.userAccounts = preservedAccounts;
+            db.globalBannedUsers = preservedBanned;
+
+            await saveDb(db);
+            alert("✅ All Server Data Cleared Successfully!");
+            loadFeed(); renderGroups(); renderDmList(); renderVaultItems(); updateStorageSizeDisplay();
+        }
+
+        function switchMainTab(tabKey, el) {
+            document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content-section').forEach(s => s.classList.remove('active'));
+            el.classList.add('active');
+
+            if (tabKey === 'feed') { document.getElementById('feedTab').classList.add('active'); loadFeed(); }
+            else if (tabKey === 'readConfessions') { document.getElementById('readConfessionsTab').classList.add('active'); loadReadConfessions(); }
+            else if (tabKey === 'writeConfession') { document.getElementById('writeConfessionTab').classList.add('active'); }
+            else if (tabKey === 'groupchat') { document.getElementById('groupChatTab').classList.add('active'); renderGroups(); }
+            else if (tabKey === 'randomchat') { document.getElementById('randomChatTab').classList.add('active'); }
+            else if (tabKey === 'dm') { document.getElementById('dmTab').classList.add('active'); renderDmList(); }
+            else if (tabKey === 'profile') { 
+                document.getElementById('profileTab').classList.add('active'); 
+                if (isAdmin) renderAdminUserTable();
+            }
+            else if (tabKey === 'vault') { document.getElementById('vaultTab').classList.add('active'); renderVaultItems(); }
+        }
+
+        function toggleAdminMode() {
+            if (!isAdmin) {
+                document.getElementById('adminPasswordInput').value = '';
+                openModal('adminPasswordModal');
+            } else {
+                isAdmin = false;
+                document.getElementById('adminBtn').innerHTML = '<i class="fa-solid fa-lock"></i> Admin: OFF';
+                document.getElementById('adminBtn').style.background = 'rgba(255, 42, 109, 0.2)';
+                document.getElementById('adminBtn').style.color = '#ff2a6d';
+                document.getElementById('addStoryBtnWrapper').style.display = 'none';
+                document.getElementById('adminGlobalBanSection').style.display = 'none';
+                document.getElementById('adminStorageBadge').style.display = 'none';
+                alert("Admin Mode OFF Successfully");
+                loadFeed(); loadReadConfessions();
+            }
+        }
+
+        function verifyAdminPassword() {
+            if (document.getElementById('adminPasswordInput').value.trim() === "120904") {
+                isAdmin = true;
+                document.getElementById('adminBtn').innerHTML = '<i class="fa-solid fa-unlock"></i> Admin: ON';
+                document.getElementById('adminBtn').style.background = '#00f5a0';
+                document.getElementById('adminBtn').style.color = '#060d16';
+                document.getElementById('addStoryBtnWrapper').style.display = 'flex';
+                document.getElementById('adminGlobalBanSection').style.display = 'block';
+                document.getElementById('adminStorageBadge').style.display = 'inline-block';
+                closeModal('adminPasswordModal');
+                updateStorageSizeDisplay();
+                renderAdminUserTable();
+                alert("✅ Admin Access Granted!");
+                loadFeed(); loadReadConfessions();
+            } else alert("❌ Wrong Password!");
+        }
+
+        async function renderAdminUserTable() {
+            if (!isAdmin) return;
+            const tableBody = document.getElementById('adminUserTableBody');
+            let db = await fetchDb();
+            if (!db) return;
+
+            const users = db.userAccounts || [];
+            const bannedList = db.globalBannedUsers || [];
+            tableBody.innerHTML = '';
+
+            users.forEach(u => {
+                const isBanned = bannedList.includes(u.username);
+                const statusHtml = isBanned ? `<span class="status-badge status-banned">Banned</span>` : `<span class="status-badge status-active">Active</span>`;
+                const banActionBtn = isBanned 
+                    ? `<button class="btn-action-small btn-unban" onclick="toggleUserBan('${u.username}', false)">Unban</button>`
+                    : `<button class="btn-action-small btn-delete" onclick="toggleUserBan('${u.username}', true)">Block</button>`;
+
+                tableBody.innerHTML += `
+                    <tr>
+                        <td style="font-weight:bold;">@${u.username}</td>
+                        <td>${u.joinedDate || 'N/A'}</td>
+                        <td>${statusHtml}</td>
+                        <td>
+                            <button class="btn-action-small btn-reset-pass" onclick="resetUserPassword('${u.username}')">Reset Pass</button>
+                            ${banActionBtn}
+                            <button class="btn-action-small btn-delete" onclick="deleteUserAccount('${u.username}')">Delete Account</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        async function resetUserPassword(targetUser) {
+            if (!isAdmin) return;
+            const newPass = prompt(`🔑 Enter new reset password for user @${targetUser}:`);
+            if (newPass && newPass.trim() !== '') alert(`✅ Password for @${targetUser} updated!`);
+        }
+
+        async function toggleUserBan(targetUser, banState) {
+            if (!isAdmin) return;
+            let db = await fetchDb();
+            if (!db) return;
+            if (!db.globalBannedUsers) db.globalBannedUsers = [];
+
+            if (banState) {
+                if (!db.globalBannedUsers.includes(targetUser)) db.globalBannedUsers.push(targetUser);
+            } else {
+                db.globalBannedUsers = db.globalBannedUsers.filter(x => x !== targetUser);
+            }
+            await saveDb(db);
+            renderAdminUserTable();
+        }
+
+        async function deleteUserAccount(targetUser) {
+            if (!isAdmin) return;
+            if (confirm(`⚠️ Delete account @${targetUser}?`)) {
+                let db = await fetchDb();
+                if (!db) return;
+                db.userAccounts = (db.userAccounts || []).filter(u => u.username !== targetUser);
+                db.globalBannedUsers = (db.globalBannedUsers || []).filter(u => u !== targetUser);
+                await saveDb(db);
+                renderAdminUserTable();
+            }
+        }
+
+        async function executeGlobalBan() {
+            if (!isAdmin) return alert("Admin access required!");
+            const target = document.getElementById('globalBanInput').value.trim();
+            if (!target) return alert("Enter exact username!");
+            toggleUserBan(target, true);
+            document.getElementById('globalBanInput').value = '';
+            alert(`🚫 Permanent Ban Applied to @${target}`);
+        }
+
+        /* INSTAGRAM UI MESSAGING LIST & SCREEN CONTROLS */
+        async function renderDmList() {
+            const box = document.getElementById('dmUserList');
+            const notesBar = document.getElementById('instaNotesBar');
+            const q = document.getElementById('dmSearch').value.trim().toLowerCase();
+            let db = await fetchDb();
+            if (!db) return;
+
+            const registeredAccounts = db.userAccounts || [];
+
+            notesBar.innerHTML = `
+                <div class="insta-note-item">
+                    <div class="insta-note-cloud">Your note</div>
+                    <div class="insta-avatar-circle"><div class="insta-avatar-img"><i class="fa-solid fa-plus"></i></div></div>
+                    <span class="insta-note-name">Your Note</span>
+                </div>
+            `;
+
+            registeredAccounts.forEach(uObj => {
+                if (uObj.username !== currentUser) {
+                    notesBar.innerHTML += `
+                        <div class="insta-note-item" onclick="openFullChat('dm', '${uObj.username}')">
+                            <div class="insta-avatar-circle"><div class="insta-avatar-img">${uObj.username.charAt(0).toUpperCase()}</div></div>
+                            <span class="insta-note-name">${uObj.username}</span>
+                        </div>
+                    `;
+                }
+            });
+
+            box.innerHTML = '';
+            registeredAccounts.forEach(uObj => {
+                const u = uObj.username;
+                if (u === currentUser) return;
+
+                const chatKey = [currentUser, u].sort().join('_dm_');
+                const msgs = (db.directMessages || {})[chatKey] || [];
+                let lastMsg = msgs.length > 0 ? (msgs[msgs.length - 1].text || 'Sent media') : 'Tap to open chat';
+
+                if (!q || u.toLowerCase().includes(q)) {
+                    box.innerHTML += `
+                        <div class="insta-chat-item" onclick="openFullChat('dm', '${u}')">
+                            <div class="insta-chat-avatar">${u.charAt(0).toUpperCase()}</div>
+                            <div class="insta-chat-info">
+                                <span class="insta-chat-username">@${u}</span>
+                                <span class="insta-chat-lastmsg">${lastMsg}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        async function renderGroups() {
+            const box = document.getElementById('groupList');
+            const q = document.getElementById('groupSearch').value.trim().toLowerCase();
+            let db = await fetchDb();
+            if (!db) return;
+
+            const list = db.groupsList || [];
+            box.innerHTML = '';
+
+            list.forEach(g => {
+                if (!q || g.name.toLowerCase().includes(q)) {
+                    const msgs = (db.groupMessages || {})[g.id] || [];
+                    let lastMsg = msgs.length > 0 ? (msgs[msgs.length - 1].text || 'Attachment') : 'Tap to join group';
+                    let icon = g.privacy === 'Private' ? '🔒' : '🌐';
+
+                    box.innerHTML += `
+                        <div class="insta-chat-item" onclick="openFullChat('group', '${g.id}')">
+                            <div class="insta-chat-avatar" style="background:rgba(0,242,254,0.2); color:#00f2fe;">${g.name.charAt(0).toUpperCase()}</div>
+                            <div class="insta-chat-info">
+                                <span class="insta-chat-username">${g.name} ${icon}</span>
+                                <span class="insta-chat-lastmsg">${lastMsg}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        async function openFullChat(type, target) {
+            activeChatType = type;
+            activeChatTarget = target;
+            let db = await fetchDb();
+            if (!db) return;
+
+            if (type === 'group') {
+                const g = (db.groupsList || []).find(x => x.id === target);
+                if (!g) return;
+
+                if ((g.bannedMembers || []).includes(currentUser) && !isAdmin) {
+                    return alert("🚫 You are blocked from entering this group by the group creator!");
+                }
+
+                if (g.privacy === 'Private' && g.creator !== currentUser && !isAdmin) {
+                    const entered = prompt(`🔒 Enter Password for "${g.name}":`);
+                    if (entered !== g.password) return alert("❌ Incorrect Password!");
+                }
+
+                document.getElementById('chatHeaderTitle').innerText = g.name;
+                document.getElementById('chatHeaderAvatar').innerText = g.name.charAt(0).toUpperCase();
+                document.getElementById('blockBtn').style.display = 'none';
+                document.getElementById('setPassBtn').style.display = 'none';
+
+                if (g.creator === currentUser || isAdmin) {
+                    document.getElementById('groupSettingsBtn').style.display = 'block';
+                } else {
+                    document.getElementById('groupSettingsBtn').style.display = 'none';
+                }
+
+            } else {
+                document.getElementById('chatHeaderTitle').innerText = `@${target}`;
+                document.getElementById('chatHeaderAvatar').innerText = target.charAt(0).toUpperCase();
+                document.getElementById('blockBtn').style.display = 'block';
+                document.getElementById('setPassBtn').style.display = 'block';
+                document.getElementById('groupSettingsBtn').style.display = 'none';
+            }
+
+            document.getElementById('instaFullChatScreen').style.display = 'flex';
+            loadFullChatMessages();
+        }
+
+        async function openGroupManageModal() {
+            let db = await fetchDb();
+            if (!db) return;
+            const g = (db.groupsList || []).find(x => x.id === activeChatTarget);
+            if (!g) return;
+
+            document.getElementById('editGPrivacy').value = g.privacy || 'Public';
+            document.getElementById('editGPassWrap').style.display = g.privacy === 'Private' ? 'block' : 'none';
+            document.getElementById('editGPass').value = g.password || '';
+
+            const membersBox = document.getElementById('groupMembersList');
+            membersBox.innerHTML = '';
+            
+            const allUsers = db.userAccounts || [];
+            const bannedMembers = g.bannedMembers || [];
+
+            allUsers.forEach(u => {
+                if (u.username !== g.creator) {
+                    const isGroupBanned = bannedMembers.includes(u.username);
+                    membersBox.innerHTML += `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; border-bottom:1px solid rgba(255,255,255,0.05);">
+                            <span style="font-size:13px;">@${u.username}</span>
+                            <button class="btn-delete" style="font-size:10px;" onclick="toggleGroupMemberBan('${g.id}', '${u.username}', ${!isGroupBanned})">
+                                ${isGroupBanned ? 'Unblock' : '🚫 Block / Kick'}
+                            </button>
+                        </div>
+                    `;
+                }
+            });
+
+            openModal('manageGroupModal');
+        }
+
+        function toggleEditGroupPassField() {
+            const p = document.getElementById('editGPrivacy').value;
+            document.getElementById('editGPassWrap').style.display = p === 'Private' ? 'block' : 'none';
+        }
+
+        async function saveGroupSettings() {
+            let db = await fetchDb();
+            if (!db) return;
+            const gIndex = (db.groupsList || []).findIndex(x => x.id === activeChatTarget);
+            if (gIndex === -1) return;
+
+            db.groupsList[gIndex].privacy = document.getElementById('editGPrivacy').value;
+            db.groupsList[gIndex].password = document.getElementById('editGPass').value.trim();
+
+            await saveDb(db);
+            alert("✅ Group Settings Saved!");
+            closeModal('manageGroupModal');
+            renderGroups();
+        }
+
+        async function toggleGroupMemberBan(groupId, targetUser, banState) {
+            let db = await fetchDb();
+            if (!db) return;
+            const gIndex = (db.groupsList || []).findIndex(x => x.id === groupId);
+            if (gIndex === -1) return;
+
+            if (!db.groupsList[gIndex].bannedMembers) db.groupsList[gIndex].bannedMembers = [];
+
+            if (banState) {
+                if (!db.groupsList[gIndex].bannedMembers.includes(targetUser)) {
+                    db.groupsList[gIndex].bannedMembers.push(targetUser);
+                }
+            } else {
+                db.groupsList[gIndex].bannedMembers = db.groupsList[gIndex].bannedMembers.filter(x => x !== targetUser);
+            }
+
+            await saveDb(db);
+            alert(banState ? `🚫 User @${targetUser} blocked from this group!` : `✅ User @${targetUser} unblocked!`);
+            openGroupManageModal();
+        }
+
+        function closeFullChatScreen() {
+            document.getElementById('instaFullChatScreen').style.display = 'none';
+            renderDmList(); renderGroups();
+        }
+
+        async function loadFullChatMessages() {
+            const box = document.getElementById('fullChatMessages');
+            let db = await fetchDb();
+            if (!db) return;
+
+            let msgs = (activeChatType === 'dm')
+                ? (db.directMessages || {})[[currentUser, activeChatTarget].sort().join('_dm_')] || []
+                : (db.groupMessages || {})[activeChatTarget] || [];
+
+            box.innerHTML = '';
+            msgs.forEach((m, idx) => {
+                let isMine = m.sender === currentUser;
+                let canDeleteMsg = (isMine || isAdmin);
+                let delBtnHtml = canDeleteMsg ? `<button class="btn-msg-del" onclick="deleteChatMessage(${idx})" title="Delete Message"><i class="fa-solid fa-trash"></i></button>` : '';
+
+                let mediaHtml = '';
+                if (m.media) {
+                    if (m.isVideo) mediaHtml = `<div class="media-preview-box"><video src="${m.media}" controls></video></div>`;
+                    else if (m.isAudio) mediaHtml = `<div class="media-preview-box"><audio src="${m.media}" controls></audio></div>`;
+                    else mediaHtml = `<div class="media-preview-box"><img src="${m.media}"></div>`;
+                }
+
+                box.innerHTML += `
+                    <div class="msg-bubble ${isMine ? 'sent' : 'received'}">
+                        <div style="font-size:10px; color:${isMine ? '#060d16' : '#00f2fe'}; font-weight:bold; margin-bottom:2px; display:flex; justify-content:space-between; align-items:center;">
+                            <span>@${m.sender}</span>
+                            ${delBtnHtml}
+                        </div>
+                        ${m.text ? `<div>${linkifyText(m.text)}</div>` : ''}
+                        ${mediaHtml}
+                    </div>
+                `;
+            });
+            box.scrollTop = box.scrollHeight;
+        }
+
+        async function deleteChatMessage(msgIndex) {
+            if (!confirm("Are you sure you want to delete this message?")) return;
+            let db = await fetchDb();
+            if (!db) return;
+
+            if (activeChatType === 'dm') {
+                const chatKey = [currentUser, activeChatTarget].sort().join('_dm_');
+                if (db.directMessages && db.directMessages[chatKey]) {
+                    db.directMessages[chatKey].splice(msgIndex, 1);
+                }
+            } else {
+                if (db.groupMessages && db.groupMessages[activeChatTarget]) {
+                    db.groupMessages[activeChatTarget].splice(msgIndex, 1);
+                }
+            }
+
+            await saveDb(db);
+            loadFullChatMessages();
+        }
+
+        async function sendFullChatMsg() {
+            const inp = document.getElementById('chatInputMsg');
+            const text = inp.value.trim();
+            if (!text) return;
+
+            if (checkSuspiciousLink(text)) return alert("⚠️ Suspicious link blocked!");
+
+            let db = await fetchDb();
+            if (!db) return;
+
+            const msgObj = { id: 'm_' + Date.now(), sender: currentUser, text: text, media: null };
+
+            if (activeChatType === 'dm') {
+                const chatKey = [currentUser, activeChatTarget].sort().join('_dm_');
+                if (!db.directMessages) db.directMessages = {};
+                if (!db.directMessages[chatKey]) db.directMessages[chatKey] = [];
+                db.directMessages[chatKey].push(msgObj);
+            } else {
+                if (!db.groupMessages) db.groupMessages = {};
+                if (!db.groupMessages[activeChatTarget]) db.groupMessages[activeChatTarget] = [];
+                db.groupMessages[activeChatTarget].push(msgObj);
+            }
+
+            await saveDb(db);
+            inp.value = '';
+            loadFullChatMessages();
+        }
+
+        function sendMediaMsg() {
+            const f = document.getElementById('chatFileInput').files[0];
+            if (!f) return;
+
+            const r = new FileReader();
+            r.onload = async function(e) {
+                let db = await fetchDb();
+                if (!db) return;
+
+                const msgObj = {
+                    id: 'm_' + Date.now(),
+                    sender: currentUser,
+                    text: '',
+                    media: e.target.result,
+                    isVideo: f.type.startsWith('video'),
+                    isAudio: f.type.startsWith('audio')
+                };
+
+                if (activeChatType === 'dm') {
+                    const chatKey = [currentUser, activeChatTarget].sort().join('_dm_');
+                    if (!db.directMessages) db.directMessages = {};
+                    if (!db.directMessages[chatKey]) db.directMessages[chatKey] = [];
+                    db.directMessages[chatKey].push(msgObj);
+                } else {
+                    if (!db.groupMessages) db.groupMessages = {};
+                    if (!db.groupMessages[activeChatTarget]) db.groupMessages[activeChatTarget] = [];
+                    db.groupMessages[activeChatTarget].push(msgObj);
+                }
+
+                await saveDb(db);
+                loadFullChatMessages();
+            };
+            r.readAsDataURL(f);
+        }
+
+        /* MODALS & STORIES */
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function toggleCreateGroupPassField() {
+            const p = document.getElementById('newGPrivacy').value;
+            document.getElementById('createGroupPassWrap').style.display = p === 'Private' ? 'block' : 'none';
+        }
+
+        async function submitGroup() {
+            const name = document.getElementById('newGName').value.trim();
+            const priv = document.getElementById('newGPrivacy').value;
+            const pass = document.getElementById('newGPass').value.trim();
+
+            if (!name) return alert("Enter group name!");
+
+            let db = await fetchDb();
+            if (!db) return;
+            if (!db.groupsList) db.groupsList = [];
+
+            db.groupsList.push({
+                id: 'g_' + Date.now(),
+                name: name,
+                privacy: priv,
+                password: pass,
+                creator: currentUser,
+                bannedMembers: []
+            });
+
+            await saveDb(db);
+            closeModal('createGroupModal');
+            renderGroups();
+        }
+
+        async function submitAdminStory() {
+            const f = document.getElementById('storyMedia').files[0];
+            if (!f) return alert("Select media!");
+            const r = new FileReader();
+            r.onload = async function(e) {
+                let db = await fetchDb();
+                if (!db) return;
+                if (!db.portalStories) db.portalStories = [];
+                db.portalStories.unshift({ id: 's_'+Date.now(), media: e.target.result, isVideo: f.type.startsWith('video') });
+                await saveDb(db);
+                closeModal('storyModal'); loadStories();
+            };
+            r.readAsDataURL(f);
+        }
+
+        async function loadStories() {
+            const container = document.getElementById('storiesBar');
+            let db = await fetchDb();
+            if (!db) return;
+            const st = db.portalStories || [];
+            container.innerHTML = `
+                <div class="story-item" id="addStoryBtnWrapper" style="display: ${isAdmin?'flex':'none'};" onclick="openModal('storyModal')">
+                    <div class="story-avatar-wrapper add-story-btn"><i class="fa-solid fa-plus"></i></div>
+                    <span class="story-username">Add Story</span>
+                </div>
+            `;
+            st.forEach(s => {
+                container.innerHTML += `
+                    <div class="story-item">
+                        <div class="story-avatar-wrapper">
+                            ${s.isVideo ? `<video class="story-img" src="${s.media}"></video>` : `<img class="story-img" src="${s.media}">`}
+                        </div>
+                        <span class="story-username">👑 Admin</span>
+                    </div>
+                `;
+            });
+        }
+
+        function submitFeedPost() {
+            const t = document.getElementById('feedPostText').value.trim();
+            const f = document.getElementById('feedMediaInput').files[0];
+            if (!t && !f) return alert("Write text or select media!");
+
+            if (f) {
+                const r = new FileReader();
+                r.onload = function(e) { saveFeedPost(t, e.target.result, f.type); };
+                r.readAsDataURL(f);
+            } else saveFeedPost(t, null, null);
+        }
+
+        async function saveFeedPost(text, media, type) {
+            let db = await fetchDb();
+            if (!db) return;
+            if (!db.allFeedPosts) db.allFeedPosts = [];
+            db.allFeedPosts.unshift({ id: 'fp_' + Date.now(), author: currentUser, text: text, media: media, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) });
+            await saveDb(db);
+            document.getElementById('feedPostText').value = '';
+            document.getElementById('feedMediaInput').value = '';
+            loadFeed();
+        }
+
+        async function loadFeed() {
+            const box = document.getElementById('feedList');
+            let db = await fetchDb();
+            if (!db) return;
+            box.innerHTML = '';
+            (db.allFeedPosts || []).forEach(p => {
+                let canDelete = (p.author === currentUser || isAdmin);
+                let deleteBtnHtml = canDelete ? `<button class="btn-delete" style="position:absolute; top:15px; right:15px; font-size:11px;" onclick="deleteFeedPost('${p.id}')"><i class="fa-solid fa-trash"></i> Delete</button>` : '';
+
+                box.innerHTML += `
+                    <div class="card-post">
+                        ${deleteBtnHtml}
+                        <div style="font-size:12px; color:#94a3b8; margin-bottom:6px;">@${p.author} • ${p.time}</div>
+                        <div>${linkifyText(p.text)}</div>
+                        ${p.media ? `<div class="media-preview-box"><img src="${p.media}"></div>` : ''}
+                    </div>
+                `;
+            });
+        }
+
+        async function deleteFeedPost(postId) {
+            if (!confirm("Are you sure you want to delete this post?")) return;
+            let db = await fetchDb();
+            if (!db) return;
+            db.allFeedPosts = (db.allFeedPosts || []).filter(p => p.id !== postId);
+            await saveDb(db);
+            loadFeed();
+        }
+
+        function submitConfession() {
+            const text = document.getElementById('confessionText').value.trim();
+            const category = document.getElementById('confessionCat').value;
+            if (!text) return alert("Write confession text!");
+            saveConfession(text, category);
+        }
+
+        async function saveConfession(text, category) {
+            let db = await fetchDb();
+            if (!db) return;
+            if (!db.allConfessions) db.allConfessions = [];
+            db.allConfessions.unshift({ 
+                id: 'c_' + Date.now(), 
+                author: currentUser, 
+                text: text, 
+                category: category 
+            });
+            await saveDb(db);
+            document.getElementById('confessionText').value = '';
+            alert("Confession Submitted!");
+        }
+
+        function filterReadConfessions(cat, el) {
+            document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            currentConfessionFilter = cat;
+            loadReadConfessions();
+        }
+
+        async function loadReadConfessions() {
+            const box = document.getElementById('readConfessionCards');
+            let db = await fetchDb();
+            if (!db) return;
+            let list = db.allConfessions || [];
+            if (currentConfessionFilter !== 'All') list = list.filter(c => c.category === currentConfessionFilter);
+
+            box.innerHTML = '';
+            list.forEach(c => {
+                let authorDisplay = isAdmin ? `Shared by @${c.author || 'Anonymous'}` : `🎭 Anonymous`;
+                let deleteBtnHtml = isAdmin ? `<button class="btn-delete" style="position:absolute; top:15px; right:15px; font-size:11px;" onclick="deleteConfession('${c.id}')"><i class="fa-solid fa-trash"></i> Delete</button>` : '';
+
+                box.innerHTML += `
+                    <div class="card-post">
+                        ${deleteBtnHtml}
+                        <div style="color:#00f2fe; font-size:12px; margin-bottom:6px;">${authorDisplay} (${c.category})</div>
+                        <div>${linkifyText(c.text)}</div>
+                    </div>
+                `;
+            });
+        }
+
+        async function deleteConfession(confId) {
+            if (!isAdmin) return;
+            if (!confirm("Are you sure you want to delete this confession?")) return;
+            let db = await fetchDb();
+            if (!db) return;
+            db.allConfessions = (db.allConfessions || []).filter(c => c.id !== confId);
+            await saveDb(db);
+            loadReadConfessions();
+        }
+
+        function submitVaultItem() {
+            const title = document.getElementById('vaultTitle').value.trim();
+            const link = document.getElementById('vaultLink').value.trim();
+            const f = document.getElementById('vaultFile').files[0];
+
+            if (!title && !f) return alert("File/Movie title or file required!");
+
+            if (f) {
+                const r = new FileReader();
+                r.onload = function(e) {
+                    saveVaultItemToDb(title || f.name, e.target.result);
+                };
+                r.readAsDataURL(f);
+            } else {
+                saveVaultItemToDb(title, link);
+            }
+        }
+
+        async function saveVaultItemToDb(title, linkOrFile) {
+            let db = await fetchDb();
+            if (!db) return;
+            if (!db.openVaultItems) db.openVaultItems = [];
+            db.openVaultItems.unshift({ id: 'v_' + Date.now(), author: currentUser, title: title, link: linkOrFile });
+            await saveDb(db);
+            document.getElementById('vaultTitle').value = '';
+            document.getElementById('vaultLink').value = '';
+            document.getElementById('vaultFile').value = '';
+            renderVaultItems();
+        }
+
+        async function renderVaultItems() {
+            const box = document.getElementById('vaultItemsList');
+            let db = await fetchDb();
+            if (!db) return;
+            box.innerHTML = '';
+            (db.openVaultItems || []).forEach(v => {
+                let isDataFile = v.link && v.link.startsWith('data:');
+                let downloadBtnHtml = '';
+                
+                if (isDataFile) {
+                    downloadBtnHtml = `<a href="${v.link}" download="${v.title}" class="btn-post" style="display:inline-block; margin-top:8px; text-decoration:none; font-size:12px; padding:6px 14px;"><i class="fa-solid fa-download"></i> Download File 📥</a>`;
+                } else if (v.link) {
+                    downloadBtnHtml = `<a href="${v.link}" target="_blank" class="btn-post" style="display:inline-block; margin-top:8px; text-decoration:none; font-size:12px; padding:6px 14px;"><i class="fa-solid fa-external-link"></i> Open / Download Link 🔗</a>`;
+                }
+
+                box.innerHTML += `
+                    <div class="card-post">
+                        <div style="font-size:12px; color:#94a3b8; margin-bottom:4px;">Shared by @${v.author}</div>
+                        <h4 style="color:#fff; margin-bottom:8px;">${linkifyText(v.title)}</h4>
+                        ${isDataFile && v.link.startsWith('data:image') ? `<div class="media-preview-box"><img src="${v.link}"></div>` : ''}
+                        ${isDataFile && v.link.startsWith('data:video') ? `<div class="media-preview-box"><video src="${v.link}" controls></video></div>` : ''}
+                        ${downloadBtnHtml}
+                    </div>
+                `;
+            });
+        }
+
+        function startRandomChat() {
+            document.getElementById('randomMatchConfigBox').style.display = 'none';
+            document.getElementById('randomAgeBox').style.display = 'none';
+            document.getElementById('btnFindMatch').style.display = 'none';
+            document.getElementById('randomChatBox').style.display = 'flex';
+            document.getElementById('randomInputBox').style.display = 'flex';
+            document.getElementById('btnRandomExit').style.display = 'block';
+
+            document.getElementById('randomChatBox').innerHTML = '<div style="color:#00f5a0; text-align:center;">Connected to stranger! Say Hi! 👋</div>';
+        }
+
+        function sendRandomMsg() {
+            const inp = document.getElementById('randomInput');
+            if (!inp.value.trim()) return;
+            document.getElementById('randomChatBox').innerHTML += `<div class="msg-bubble sent">You: ${linkifyText(inp.value)}</div>`;
+            inp.value = '';
+            const box = document.getElementById('randomChatBox');
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function exitRandomChat() {
+            if (!confirm("Exit current random chat?")) return;
+            document.getElementById('randomMatchConfigBox').style.display = 'grid';
+            document.getElementById('randomAgeBox').style.display = 'grid';
+            document.getElementById('btnFindMatch').style.display = 'block';
+            document.getElementById('randomChatBox').style.display = 'none';
+            document.getElementById('randomInputBox').style.display = 'none';
+            document.getElementById('btnRandomExit').style.display = 'none';
+            document.getElementById('randomChatBox').innerHTML = '';
+        }
+
+        function togglePrivacySetting() {
+            alert("Profile privacy updated!");
+        }
+
+        async function updateFollowStats() {
+            let db = await fetchDb();
+            if (!db) return;
+            if (!db.userFollows) db.userFollows = {};
+            let fData = db.userFollows[currentUser] || { followers: [], following: [] };
+
+            document.getElementById('myFollowersCount').innerHTML = `
+                Followers: <strong style="color:#00f2fe; cursor:pointer;" onclick="openFollowModal('followers')">${fData.followers.length}</strong> | 
+                Following: <strong style="color:#00f2fe; cursor:pointer;" onclick="openFollowModal('following')">${fData.following.length}</strong>
+            `;
+        }
+
+        async function openFollowModal(type) {
+            let db = await fetchDb();
+            if (!db) return;
+            let fData = (db.userFollows || {})[currentUser] || { followers: [], following: [] };
+            let list = type === 'followers' ? fData.followers : fData.following;
+
+            document.getElementById('followModalTitle').innerText = type === 'followers' ? '👥 Followers' : '👤 Following';
+            let listContainer = document.getElementById('followModalList');
+            listContainer.innerHTML = list.length === 0 ? '<p style="color:#94a3b8; font-size:12px; text-align:center;">No users.</p>' : '';
+
+            list.forEach(u => {
+                listContainer.innerHTML += `<div style="padding:8px; border-bottom:1px solid rgba(255,255,255,0.05);">@${u}</div>`;
+            });
+            openModal('followModal');
+        }
+
+        function shareMyProfileLink() {
+            navigator.clipboard.writeText(window.location.href.split('#')[0] + '#' + currentUser);
+            alert("🔗 Profile Link Copied!");
+        }
+
+        function copyWebsiteLink() {
+            navigator.clipboard.writeText(window.location.href);
+            alert("🔗 Website Link Copied!");
+        }
+    </script>
+</body>
+</html>
